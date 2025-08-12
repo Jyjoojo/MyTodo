@@ -2,18 +2,19 @@ import { useState, useEffect } from "react";
 import { Input } from "../components/forms/Input";
 import { useQuery } from "@tanstack/react-query";
 import { TodoGroup } from "../components/TodoGroup";
+import { useToggle } from "../hooks/useToggle";
 
 export function TodoPage() {
     const [todoText, setTodoText] = useState("");
     const [filter, setFilter] = useState("all");
     const [todos, setTodos] = useState([]);
 
-    const { isLoading, data = [], error } = useQuery({
+    const { isLoading, data = [], error, refetch } = useQuery({
         queryKey: ['todos'],
         queryFn: () =>
             fetch('https://jsonplaceholder.typicode.com/todos')
                 .then(response => response.json())
-                .then(data => data.slice(0, 5))
+                .then(data => data.slice(0, 5)),
     });
 
     // Remplit les todos seulement au premier chargement
